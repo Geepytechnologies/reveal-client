@@ -1,0 +1,23 @@
+:root{
+    --secondary: #ef1e41;
+    --primary: #09070a;
+    --aux1: #607ef7;
+    --aux2: #9c67c9;
+  }
+  
+  /* utility sizes */
+  /* sm = min-width: 640px
+  md = min-width: 768px
+  lg = min-width: 1024px */
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
