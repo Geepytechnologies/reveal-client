@@ -143,6 +143,7 @@ const Subscribe = styled.button`
 `;
 
 const Video = () => {
+  const domain = import.meta.env.VITE_DOMAIN;
   const {currentuser}  = useSelector((state:any)=>state.user);
   const {currentvideo}  = useSelector((state:any)=>state.video);
   const dispatch = useDispatch();
@@ -151,8 +152,8 @@ const Video = () => {
   useEffect(() => {
     const fetchData = async ()=>{
       try {
-        const videoRes = await axios.get(`/api/videos/find/${path}`);
-        const channelRes = await axios.get(`/api/users/find/${videoRes.data.userId}`);
+        const videoRes = await axios.get(`${domain}/api/videos/find/${path}`);
+        const channelRes = await axios.get(`${domain}/api/users/find/${videoRes.data.userId}`);
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data))
         // console.log(videoRes.data)
@@ -165,7 +166,7 @@ const Video = () => {
   const [randomvideos, setRandomVideos] = useState([]);
   useEffect(()=>{
      const fetchVideos = async ()=>{
-      const res = await axios.get(`http://localhost:5000/api/videos/random`);
+      const res = await axios.get(`${domain}/api/videos/random`);
       setRandomVideos(res.data);
      }
      fetchVideos();

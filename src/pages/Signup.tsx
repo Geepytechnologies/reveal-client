@@ -98,6 +98,9 @@ const SignUp = () => {
   const [passwordErrMsg, setPasswordErrMsg] = useState('');
   const [showpassword, setShowpassword] = useState(false);
   const dispatch = useDispatch();
+  const domain = import.meta.env.VITE_DOMAIN;
+  const apikey = import.meta.env.VITE_EMAIL_API_KEY;
+
 
   const Loader = ()=>{
     return (
@@ -124,7 +127,7 @@ const SignUp = () => {
     }else{
         null
        /*  try{
-         const res = await axios.post("api/auth/signup",{username,password,email});
+         const res = await axios.post(`${domain}/api/auth/signup`,{username,password,email});
          console.log(res);
         }catch(err){
             console.log(err);
@@ -139,7 +142,7 @@ const SignUp = () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
      .then((result)=>{
-      axios.post("api/auth/googleauth", {
+      axios.post(`${domain}/api/auth/googleauth`, {
         username: result.user.displayName,
         email: result.user.email,
         img: result.user.photoURL
@@ -151,7 +154,7 @@ const SignUp = () => {
        dispatch(loginFailure());
      });
   } */
-  const url = `https://emailvalidation.abstractapi.com/v1/?api_key=38733d0fd8fa4a7d853f2359679f04d2&email=${email}`
+  const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apikey}&email=${email}`
   const confirmEmail = async ()=>{
      await fetch(url)
      .then((response) => response.json())

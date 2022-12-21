@@ -1,8 +1,10 @@
 import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider} from "firebase/auth";
+const apikey = import.meta.env.VITE_API_KEY;
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD0z86BNF4wPNeqxESM-n3CQ0SQIWo5Glg",
+  apiKey: apikey,
   authDomain: "cinematicview-474b1.firebaseapp.com",
   projectId: "cinematicview-474b1",
   storageBucket: "cinematicview-474b1.appspot.com",

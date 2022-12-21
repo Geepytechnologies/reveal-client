@@ -23,11 +23,12 @@ const Home = ({type}:any) => {
   const dispatch = useDispatch();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const domain = import.meta.env.VITE_DOMAIN;
   useEffect(()=>{
      const fetchVideos = async ()=>{
       setLoading(true);
       // dispatch(fetchStart());
-      const res = await axios.get(`http://localhost:5000/api/videos/${type}`);
+      const res = await axios.get(`${domain}/api/videos/${type}`);
       setVideos(res.data);
       setLoading(false);
      }

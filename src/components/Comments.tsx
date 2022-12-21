@@ -42,10 +42,11 @@ const Comments = ({videoID}:props) => {
   const [comment, setComment] = useState<any>([]);
   const [commentadded, setCommentadded] = useState(false)
   const [addcomment, setAddComment] = useState<String>();
+  const domain = import.meta.env.VITE_DOMAIN;
   useEffect(()=>{
     const fetchComments = async ()=>{
       try{
-        const response = await axios.get(`http://localhost:5000/api/comments/${videoID}`)
+        const response = await axios.get(`${domain}/api/comments/${videoID}`)
         setComment(response.data)
       }catch(err){
         // console.log(err);

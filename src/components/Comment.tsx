@@ -44,11 +44,12 @@ type Props = {
 }
 
 const Comment: React.FunctionComponent<Props> = ({comment}) => {
+  const domain = import.meta.env.VITE_DOMAIN;
   const [user, setUser] = useState<any>();
   useEffect(()=>{
    const getuser = async ()=>{
     try{
-      const response = await axios.get(`http://localhost:5000/api/users/find/${comment.userID}`)
+      const response = await axios.get(`${domain}/api/users/find/${comment.userID}`)
       setUser(response.data)
     }catch(err){
        

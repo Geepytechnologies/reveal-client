@@ -7,6 +7,8 @@ import {auth, provider} from "../firebase"
 import {signInWithPopup} from "firebase/auth"
 import { Link, Path } from "react-router-dom";
 import google from "../img/google.png"
+const domain = import.meta.env.VITE_DOMAIN;
+
 
 
 const Container = styled.div`
@@ -80,7 +82,7 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(loginStart())
     try{
-      const res = await axios.post("api/auth/signin",{username,password});
+      const res = await axios.post(`${domain}/api/auth/signin`,{username,password});
       localStorage.setItem("access", res.data.token);
       dispatch(loginSuccess(res.data))
     }catch(err){
@@ -91,7 +93,7 @@ const SignIn = () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
      .then((result)=>{
-      axios.post("api/auth/googleauth", {
+      axios.post(`${domain}/api/auth/googleauth`, {
         username: result.user.displayName,
         email: result.user.email,
         img: result.user.photoURL

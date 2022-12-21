@@ -62,10 +62,11 @@ const Info = styled.div`
 
 
 const Recommended = ({video}:any) => {
+    const domain = import.meta.env.VITE_DOMAIN;
   const [channel, setChannel] = useState<any>([]);
   useEffect(()=>{
      const fetchChannel = async ()=>{
-      const res = await axios.get(`api/users/find/${video?.userId}`);
+      const res = await axios.get(`${domain}/api/users/find/${video?.userId}`);
       setChannel(res.data);
      }
      fetchChannel();

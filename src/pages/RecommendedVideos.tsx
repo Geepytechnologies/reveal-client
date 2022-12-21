@@ -13,6 +13,8 @@ import axios, { AxiosResponse } from "axios";
 import { fetchSuccess } from "../utils/videoSlice";
 import { format } from "timeago.js";
 import Recommended from "../components/Recommended";
+const domain = import.meta.env.VITE_DOMAIN;
+
 
 const Container = styled.div`
   display: flex;
@@ -146,11 +148,12 @@ const RecommendedVideos = () => {
   const dispatch = useDispatch();
   const path = useLocation().pathname.split('/')[3];
   const [channel, setChannel] = useState<any | null>(null);
+
   useEffect(() => {
     const fetchData = async ()=>{
       try {
-        const videoRes = await axios.get(`/api/videos/find/${path}`);
-        const channelRes = await axios.get(`/api/users/find/${videoRes.data.userId}`);
+        const videoRes = await axios.get(`${domain}/api/videos/find/${path}`);
+        const channelRes = await axios.get(`${domain}/api/users/find/${videoRes.data.userId}`);
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data))
       }catch(err){
