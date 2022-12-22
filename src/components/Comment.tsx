@@ -58,7 +58,6 @@ const Comment: React.FunctionComponent<Props> = ({comment}) => {
    }
    getuser();
   },[comment.userID])
-  console.log(user);
   return (
     <Container>
       <Avatar className="mybackground" src={user?.img} />

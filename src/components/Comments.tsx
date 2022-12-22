@@ -77,7 +77,7 @@ const Comments = ({videoID}:props) => {
   return (
     <Container>
       <NewComment>
-        <Avatar className="mybackground" src={currentuser.others.img} />
+        <Avatar className="mybackground" src={currentuser?.others.img} />
         <div className="flex items-center">
         <Input onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setAddComment(e.target.value)} placeholder="Add a comment..." />
         <button onClick={postComment} className="bg-[#ef1e41] ml-[15px] min-w-[70px] text-white rounded-xl px-[7px] py-[10px] ">Post</button>

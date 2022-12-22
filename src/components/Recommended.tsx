@@ -71,7 +71,6 @@ const Recommended = ({video}:any) => {
      }
      fetchChannel();
     },[video?.userId])
-    console.log(channel)
   return (
     <Link to={`/videos/recommended/${video?._id}`} style={{ textDecoration: "none" }}>
       <Container>
