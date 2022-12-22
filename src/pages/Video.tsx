@@ -105,6 +105,8 @@ const Image = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border: 1px solid #e6e6e6;
+  /* background-color: #e6e6e6; */
 `;
 
 const ChannelDetail = styled.div`
@@ -209,7 +211,7 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src={channel?.img} />
+            <Image className="mybackground" src={channel?.img} />
             <ChannelDetail>
               <ChannelName>{channel?.username}</ChannelName>
               <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
@@ -227,7 +229,7 @@ const Video = () => {
       </Content>
       <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
         <p className="text-white mb-[10px]">Recommended Videos</p>
-        <div className="flex flex-row md:flex-col w-[500px] overflow-x-scroll px-[10px] ">
+        <div className="flex items-center flex-row md:flex-col w-[500px] overflow-x-scroll px-[10px] ">
           {randomvideos.map((video, index) => (
             <Recommended key={index} video={video} />
           ))}

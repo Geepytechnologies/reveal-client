@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import { toggleMenu } from "../utils/menuSlice";
+import myimage from "../img/geepy.jpg"
 
 const Container = styled.div`
   position: sticky;
@@ -67,7 +68,8 @@ const Avatar = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #999;
+  /* background-color: #999; */
+  object-fit: cover;
 `;
 
 const Navbar = () => {
@@ -86,8 +88,13 @@ const Navbar = () => {
         {currentuser ? (
           <User>
             <VideoCallOutlinedIcon />
-            <Avatar src={currentuser.img} />
-            {currentuser.username}
+            <div className="w-[32px] relative h-[32px] mybackground rounded-full">
+               <div className="absolute w-[100%] h-[100%] rounded-full top-0 flex items-center justify-center">
+                <p>{currentuser.others.username?.slice(0,1)}</p>
+                </div>
+               <Avatar src={currentuser.others.img} />
+            </div>
+            <p className="text-white">{currentuser.others.username}</p>
           </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>

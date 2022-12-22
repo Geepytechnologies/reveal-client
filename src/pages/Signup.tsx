@@ -9,6 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { CSSProperties } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
+import google from "../img/google.png"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,7 +26,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 56px);
+  height: 100vh;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -36,7 +37,9 @@ const Wrapper = styled.div`
   /* background-color: ${({ theme }) => theme.bgLighter}; */
   border: 1px solid ${({ theme }) => theme.soft};
   padding: 20px 50px;
-  gap: 10px;
+  margin: 20px 0px;
+  /* gap: 10px; */
+  height: auto;
 `;
 
 const Title = styled.h1`
@@ -173,27 +176,45 @@ const SignUp = () => {
         setPasswordErrMsg("");
     }
   }
+  const signInWithGoogle = async ()=>{
+    dispatch(loginStart());
+    signInWithPopup(auth, provider)
+     .then((result)=>{
+      axios.post(`${domain}/api/auth/googleauth`, {
+        username: result.user.displayName,
+        email: result.user.email,
+        img: result.user.photoURL
+      }).then((res)=>{
+        dispatch(loginSuccess(res.data))
+      })
+     })
+     .catch((error)=>{
+       dispatch(loginFailure());
+     });
+  }
   return (
     <Container>
       <Wrapper className="mybackground">
         <Title>Sign Up</Title>
-        <form className="w-[100%] flex flex-col" onSubmit={handleLogin}>
-        <div className="border w-[90%] border-white p-[3px]"><Input type="text" required placeholder="Username" onChange={(e)=>setUsername(e.target.value)}/></div>
-        <div className="flex mt-[10px] w-[90%] flex-col border border-white p-[3px]"><Input type="email" required={true}  placeholder="email" onChange={(e)=>setEmail(e.target.value)}/>
+        <p>to Reveal</p>
+        <form className="w-[100%] mt-[9px] flex flex-col" onSubmit={handleLogin}>
+        <div className="border w-[100%] rounded-xl border-white p-[3px]"><Input type="text" required placeholder="Username" onChange={(e)=>setUsername(e.target.value)}/></div>
+        <div className="flex mt-[10px] rounded-xl w-[100%] flex-col border border-white p-[3px]"><Input type="email" required={true}  placeholder="email" onChange={(e)=>setEmail(e.target.value)}/>
         </div>
         {emailError && <span className="text-[red] font-[500] text-[15px]">{emaildataErrMsg}</span>}
-        <div className="flex mt-[10px] w-[90%] items-center border border-white p-[3px]">
+        <div className="flex mt-[10px] rounded-xl w-[100%] items-center border border-white p-[3px]">
         {!showpassword ? (<><Input type="password" required={true} placeholder="password" onChange={(e) => setPassword(e.target.value)} /><div onClick={toggleVisibility}><VisibilityOffIcon  /></div></>) : 
         (<><Input type="text" required={true} placeholder="password" onChange={(e) => setPassword(e.target.value)} /><div onClick={toggleVisibility}><VisibilityIcon  /></div></>)
        }
         </div>
-        <div className="flex mt-[10px] w-[90%]  flex-col border border-white p-[3px]">
+        <div className="flex mt-[10px] rounded-xl w-[100%]  flex-col border border-white p-[3px]">
         <Input type="password" required placeholder="Confirm password" onChange={(e)=>checkPassword(e)} />
         </div>
         {PasswordError && <span className="text-[12px] text-center">{passwordErrMsg}</span>}
-        {!loading ? <Button className="mt-[5px]" type="submit">Sign up</Button> :
+        {!loading ? <Button className="mt-[15px]" type="submit">Sign up</Button> :
         <Loader />}
         </form>
+        <div className="cursor-pointer rounded-xl mt-[15px] bg-[white] text-[#999] w-[90%] flex items-center justify-center" onClick={signInWithGoogle}>continue with <span><img className="w-[20px] h-[20px] ml-[5px]" src={google} alt="google" /></span></div>
         <More>
             English(USA)
             <div className="ml-[50px]">

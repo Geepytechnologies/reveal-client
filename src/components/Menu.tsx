@@ -115,7 +115,7 @@ const Menu = ({ darkMode, setDarkMode }:props) => {
             Reveal
           </Logo>
         </Link>
-        <Link to="random" style={{ textDecoration: "none", color: "inherit" }}>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
         <Item>
           <HomeIcon />
           Home

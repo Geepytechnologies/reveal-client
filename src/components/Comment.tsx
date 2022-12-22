@@ -15,6 +15,7 @@ const Avatar = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border: 1px solid #e6e6e6;
 `;
 
 const Details = styled.div`
@@ -57,10 +58,10 @@ const Comment: React.FunctionComponent<Props> = ({comment}) => {
    }
    getuser();
   },[comment.userID])
-  /* console.log(user); */
+  console.log(user);
   return (
     <Container>
-      <Avatar src={user?.img} />
+      <Avatar className="mybackground" src={user?.img} />
       <Details>
         <Name>
           {user?.username} <Date>{format(comment.createdAt)}</Date>

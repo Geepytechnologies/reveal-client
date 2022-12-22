@@ -128,7 +128,7 @@ const Smallmenu = ({ darkMode, setDarkMode }:props) => {
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
-            <CiPlay1 />
+            <img src="/logowhite.png" className="w-[40px] h-[40px]" />
           </Logo>
         </Link>
         <Item>

@@ -16,7 +16,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 56px);
+  height: 100vh;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -27,7 +27,9 @@ const Wrapper = styled.div`
   /* background-color: ${({ theme }) => theme.bgLighter}; */
   border: 1px solid ${({ theme }) => theme.soft};
   padding: 20px 50px;
-  gap: 10px;
+  margin: 20px 0px;
+  /* gap: 10px; */
+  height: auto;
 `;
 
 const Title = styled.h1`
@@ -45,6 +47,7 @@ const Input = styled.input`
   padding: 10px;
   background-color: transparent;
   width: 100%;
+  margin: 10px 0px;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -109,13 +112,13 @@ const SignIn = () => {
     <Container>
       <Wrapper className="mybackground">
         <Title>Sign in</Title>
-        <SubTitle>to continue to CinematicView</SubTitle>
+        <SubTitle>to Reveal</SubTitle>
         <Input placeholder="username" onChange={(e)=>setUsername(e.target.value)} />
         <Input type="password" placeholder="password" onChange={(e)=>setPassword(e.target.value)} />
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
-        <Button onClick={signInWithGoogle}>Sign Up with <span><img src={google} alt="google" /></span></Button>
-        <div>
+        <div className="cursor-pointer rounded-xl bg-[white] text-[#999] w-[90%] flex items-center justify-center" onClick={signInWithGoogle}>continue with <span><img className="w-[20px] h-[20px] ml-[5px]" src={google} alt="google" /></span></div>
+        <div className="mt-[5px]">
           <p>Don&apos;t have an account? <Link to={"/signUp"}><span><button>Sign up</button></span></Link></p>
         </div>
         <More>
