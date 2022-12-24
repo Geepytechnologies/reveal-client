@@ -3,31 +3,34 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface RequestState {
   loading: Boolean,
-  error: Boolean
+  error: Boolean,
+  errormessage: String
 }
 
 const initialState: RequestState = {
   loading: false,
-  error: false
+  error: false,
+  errormessage: ''
 }
 
 export const requestSlice = createSlice({
   name: 'request',
   initialState,
   reducers: {
-   fetchStart: (state) =>{
+   requestStart: (state) =>{
     state.loading = true;
    },
-   fetchSuccess: (state) =>{
+   requestSuccess: (state) =>{
     state.loading = false;
    },
-   fetchFailure: (state) =>{
+   requestFailure: (state, action) =>{
     state.loading = false;
     state.error = true;
+    state.errormessage = action.payload;
    }
   },
 })
 
-export const {fetchStart, fetchSuccess, fetchFailure} = requestSlice.actions;
+export const {requestStart, requestSuccess, requestFailure} = requestSlice.actions;
 
 export default requestSlice.reducer;

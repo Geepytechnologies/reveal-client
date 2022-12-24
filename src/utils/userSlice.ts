@@ -14,7 +14,6 @@ const initialState: UserState = {
   loading: false,
   error: false
 }
-const token = localStorage.getItem("access");
 
 export const userSlice = createSlice({
   name: 'user',

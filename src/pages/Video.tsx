@@ -14,6 +14,8 @@ import { fetchSuccess } from "../utils/videoSlice";
 import { format } from "timeago.js";
 import Recommended from "../components/Recommended";
 import Cookies from "universal-cookie";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 
 const Container = styled.div`
@@ -173,6 +175,13 @@ const Video = () => {
      }
      fetchVideos();
   },[])
+  const handleLike = async ()=>{
+    await axios(`${domain}/api/users/like/${currentvideo._id}`, {method: 'PUT', withCredentials: true})
+    .then((response)=>console.log(response))
+  }
+  const handleDislike = async ()=>{
+    await axios(`${domain}/api/users/dislike/${currentvideo._id}`,  {method: 'PUT',withCredentials: true})
+  }
   return (
     <Container className="md:flex-row">
       <Content>
@@ -191,11 +200,12 @@ const Video = () => {
         <Details>
           <Info>{currentvideo?.views} views • {format(currentvideo?.createdAt)}</Info>
           <Buttons>
-            <Button>
-              <ThumbUpOutlinedIcon className="" /> {currentvideo?.likes?.length}
+            <Button onClick={handleLike}>
+              {currentvideo && currentvideo.likes.includes(currentuser?._id) ? (<ThumbUpIcon />) : (<ThumbUpOutlinedIcon className="" />)}{currentvideo && currentvideo.likes.length}
             </Button>
-            <Button>
-              <ThumbDownOffAltOutlinedIcon />
+            <Button onClick={handleDislike}>
+            {currentvideo && currentvideo.likes?.includes(currentuser?._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon className="" />)}{currentvideo && currentvideo?.likes.length}
+              {/* <ThumbDownOffAltOutlinedIcon /> */}
               <span className="hidden md:block">Dislike</span> 
             </Button>
             <Button>

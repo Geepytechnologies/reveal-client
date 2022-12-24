@@ -121,7 +121,7 @@ const Menu = ({ darkMode, setDarkMode }:props) => {
           Home
         </Item>
         </Link>
-        <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
+        <Link to="trending" style={{ textDecoration: "none", color: "inherit" }}>
         <Item>
           <ExploreOutlinedIcon />
           Explore

@@ -21,7 +21,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   height: 100%;
   padding: 0px 20px;
   position: relative;
@@ -72,15 +72,45 @@ const Avatar = styled.img`
   object-fit: cover;
 `;
 
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-weight: 700;
+  font-size: 35px;
+  //md
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const Img = styled.img`
+  height: 25px;
+`;
+
+const Logotext = styled.p`
+  color: ${({ theme }) => theme.text};
+  font-size: 18px;
+`;
+
+
 const Navbar = () => {
   const {currentuser}  = useSelector((state:any)=>state.user);
   const dispatch = useDispatch();
   return (
     <Container>
       <Wrapper>
-        <div onClick={()=>dispatch(toggleMenu())} className="flex md:hidden">
+        <div onClick={()=>dispatch(toggleMenu())} className="flex md:hidden  w-[10%]">
           <MenuIcon className="text-white" />
         </div>
+        <div className="flex items-center justify-between w-[90%]">
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Logo>
+            <Img src={'/cinematicview.png'} />
+            <Logotext>Reveal</Logotext>
+          </Logo>
+        </Link>
         <Search className="hidden md:flex">
           <Input placeholder="Search" />
           <SearchOutlinedIcon className="text-white" />
@@ -88,13 +118,15 @@ const Navbar = () => {
         {currentuser ? (
           <User>
             <VideoCallOutlinedIcon />
+            <Link to="profile">
             <div className="w-[32px] relative h-[32px] mybackground rounded-full">
                <div className="absolute w-[100%] h-[100%] rounded-full top-0 flex items-center justify-center">
-                <p>{currentuser.others.username?.slice(0,1)}</p>
+                <p>{currentuser.username?.slice(0,1)}</p>
                 </div>
-               <Avatar src={currentuser.others.img} />
+               <Avatar src={currentuser.img} />
             </div>
-            <p className="text-white">{currentuser.others.username}</p>
+            </Link>
+            <p className="text-white">{currentuser.username}</p>
           </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>
@@ -104,6 +136,7 @@ const Navbar = () => {
           </Button>
         </Link>
         )}
+        </div>
       </Wrapper>
     </Container>
   );

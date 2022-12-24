@@ -18,8 +18,9 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-}  
-const rootReducer = combineReducers({user: userReducer, video: videoReducer, menu: menuReducer,request: requestReducer})
+    whitelist: ['user','menu'],
+} ;
+const rootReducer = combineReducers({user: userReducer, menu: menuReducer, video: videoReducer, request: requestReducer})
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({

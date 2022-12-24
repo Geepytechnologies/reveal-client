@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import Menu from "./components/Menu";
 import Navbar from "./components/Navbar";
@@ -12,6 +12,12 @@ import Smallmenu from "./components/Smallmenu";
 import RecommendedVideos from "./pages/RecommendedVideos";
 import Page404 from "./components/Page404";
 import SignUp from "./pages/Signup";
+import { useDispatch } from "react-redux";
+import { loginStart, loginSuccess, logout } from "./utils/userSlice";
+import { persistor } from "./utils/store";
+import Cookies from "js-cookie";
+import axios from "axios";
+import Profile from "./components/Profile";
 
 const Container = styled.div`
  display: flex;
@@ -31,6 +37,26 @@ background-color: ${({ theme }) => theme.bg};
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const dispatch = useDispatch();
+  const domain = import.meta.env.VITE_DOMAIN;
+
+  useEffect(()=>{
+    const checkuser = async ()=>{
+      try{
+        await axios.get(`${domain}/api/users/check`, {withCredentials: true})
+      }catch(error: any){
+        dispatch(logout());
+      }
+    }
+    checkuser();
+  },[])
+
+  /* useEffect(()=>{
+    setTimeout(()=>{
+      persistor.purge();
+    }, 60 * 1000);
+  },[]) */
+  
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <BrowserRouter>
@@ -45,9 +71,10 @@ function App() {
                   <Route path="/">
                     <Route index element={<Home type="random" />} />
                     <Route path="*" element={<Page404 />} />
-                    <Route path="trend" element={<Home type="trend" />} />
-                    <Route path="subscribed" element={<Home type="subscribed" />} />
+                    <Route path="trending" element={<Home type="trending" />} />
+                    <Route path="subscriptions" element={<Home type="subscribedVideos" />} />
                     <Route path="signin" element={<SignIn />} />
+                    <Route path="profile" element={<Profile />} />
                     <Route path="signUp" element={<SignUp />} />
                     <Route path="videos">
                       <Route path=":id" element={<Video />} />

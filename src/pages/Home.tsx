@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import axios from "axios";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Videoskeleton from "../components/skeletons/Videoskeleton";
+import { requestStart, requestSuccess, requestFailure } from "../utils/request";
 
 
 const Container = styled.div`
@@ -21,16 +22,22 @@ interface props {
 
 const Home = ({type}:any) => {
   const dispatch = useDispatch();
+  const {message}  = useSelector((state:any)=>state.request.errormessage);
+  const {loading}  = useSelector((state:any)=>state.request);
+
   const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const domain = import.meta.env.VITE_DOMAIN;
   useEffect(()=>{
      const fetchVideos = async ()=>{
-      setLoading(true);
-      // dispatch(fetchStart());
-      const res = await axios.get(`${domain}/api/videos/${type}`);
-      setVideos(res.data);
-      setLoading(false);
+      try{
+        dispatch(requestStart());
+        const res = await axios.get(`${domain}/api/videos/${type}`);
+        dispatch(requestSuccess());
+        setVideos(res.data);
+      }catch(err){
+        dispatch(requestFailure(err))
+      }
      }
      fetchVideos();
   },[type])

@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../utils/userSlice";
 import {auth, provider} from "../firebase"
 import {signInWithPopup} from "firebase/auth"
-import { Link, Path } from "react-router-dom";
+import { Link, Path, useNavigate } from "react-router-dom";
 import google from "../img/google.png"
 const domain = import.meta.env.VITE_DOMAIN;
 
@@ -81,13 +81,16 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogin = async(e: { preventDefault: () => void; }) =>{
     e.preventDefault();
     dispatch(loginStart())
     try{
-      const res = await axios.post(`${domain}/api/auth/signin`,{username,password});
-      localStorage.setItem("access", res.data.token);
+      const res = await axios.post(`${domain}/api/auth/signin`,{username,password},{
+        withCredentials: true,
+      })
       dispatch(loginSuccess(res.data))
+      navigate('/');
     }catch(err){
       dispatch(loginFailure())
     }
@@ -135,3 +138,7 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+function parseCookie(mytoken: string | undefined) {
+  throw new Error("Function not implemented.");
+}
