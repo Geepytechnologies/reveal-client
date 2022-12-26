@@ -20,6 +20,7 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 import logowhite from "../img/cinematicview.png"
 import { Link } from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
+import { toggleMode } from "../utils/mode";
 
 
 const Container = styled.div`
@@ -102,9 +103,13 @@ interface props {
   setDarkMode: (darkMode: boolean) => void;
 }
 
-const Menu = ({ darkMode, setDarkMode }:props) => {
+const Menu = () => {
   const {currentuser}  = useSelector((state:any)=>state.user);
+  const {darkMode}  = useSelector((state:any)=>state.mode);
   const dispatch = useDispatch();
+  const handletoggle = ()=>{
+    dispatch(toggleMode())
+  }
   return (
     <>
       <Container>
@@ -195,7 +200,7 @@ const Menu = ({ darkMode, setDarkMode }:props) => {
           <HelpOutlineOutlinedIcon />
           Help
         </Item>
-        <Item onClick={() => setDarkMode(!darkMode)}>
+        <Item onClick={handletoggle}>
           <SettingsBrightnessOutlinedIcon />
           {darkMode ? "Light" : "Dark"} Mode
         </Item>

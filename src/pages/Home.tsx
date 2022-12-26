@@ -44,7 +44,7 @@ const Home = ({type}:any) => {
   return (
     <>
     {loading ? <Videoskeleton /> : 
-    <Container className="grid grid-cols-1 md:grid-cols-1 justify-items-center lg:grid-cols-2 gap-4">
+    <Container className="grid grid-cols-1 md:grid-cols-1 min-h-screen mt-[20px] justify-items-center lg:grid-cols-2 gap-4">
       {videos.map((video:props) => (
         <Card key={video._id} video={video}/>
       ))}

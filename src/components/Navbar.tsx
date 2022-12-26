@@ -7,7 +7,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import { toggleMenu } from "../utils/menuSlice";
-import myimage from "../img/geepy.jpg"
+import myimage from "../img/geepy.jpg";
+import Addvideo from "./Addvideo";
 
 const Container = styled.div`
   position: sticky;
@@ -97,12 +98,14 @@ const Logotext = styled.p`
 
 const Navbar = () => {
   const {currentuser}  = useSelector((state:any)=>state.user);
+  const {darkMode}  = useSelector((state:any)=>state.mode);
+  const [open, setOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
   return (
     <Container>
       <Wrapper>
         <div onClick={()=>dispatch(toggleMenu())} className="flex md:hidden  w-[10%]">
-          <MenuIcon className="text-white" />
+          <MenuIcon className={darkMode ? "text-white" : "text-black"} />
         </div>
         <div className="flex items-center justify-between w-[90%]">
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -117,15 +120,20 @@ const Navbar = () => {
         </Search>
         {currentuser ? (
           <User>
-            <VideoCallOutlinedIcon />
+            <Link to="upload">
+              <VideoCallOutlinedIcon  />
+            </Link>
             <Link to="profile">
             <div className="w-[32px] relative h-[32px] mybackground rounded-full">
-               <div className="absolute w-[100%] h-[100%] rounded-full top-0 flex items-center justify-center">
+               {/* <div className="absolute w-[100%] h-[100%] rounded-full top-0 flex items-center justify-center">
                 <p>{currentuser.username?.slice(0,1)}</p>
-                </div>
+                </div> */}
                <Avatar src={currentuser.img} />
             </div>
             </Link>
+
+
+
             <p className="text-white">{currentuser.username}</p>
           </User>
         ) : (
@@ -133,12 +141,12 @@ const Navbar = () => {
           <Button>
             <AccountCircleOutlinedIcon />
             SIGN IN
-          </Button>
+          </Button>1
         </Link>
         )}
         </div>
       </Wrapper>
-    </Container>
+    </Container> 
   );
 };
 

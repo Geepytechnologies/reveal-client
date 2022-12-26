@@ -10,12 +10,13 @@ import eyedrop from "../img/eyedrop.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
-import { fetchSuccess } from "../utils/videoSlice";
+import { dislike, fetchSuccess, like } from "../utils/videoSlice";
 import { format } from "timeago.js";
 import Recommended from "../components/Recommended";
 import Cookies from "universal-cookie";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { subscription } from "../utils/userSlice";
 
 
 const Container = styled.div`
@@ -177,10 +178,16 @@ const Video = () => {
   },[])
   const handleLike = async ()=>{
     await axios(`${domain}/api/users/like/${currentvideo._id}`, {method: 'PUT', withCredentials: true})
-    .then((response)=>console.log(response))
+    dispatch(like(currentuser._id))
   }
   const handleDislike = async ()=>{
     await axios(`${domain}/api/users/dislike/${currentvideo._id}`,  {method: 'PUT',withCredentials: true})
+    dispatch(dislike(currentuser._id))
+  }
+  const handleSub = async ()=>{
+    currentuser.subscribedUsers.includes(channel._id) ? 
+    await axios(`${domain}/api/users/unsubscribe/${channel._id}`,{method: 'PUT', withCredentials: true}) : await axios(`${domain}/api/users/subscribe/${channel._id}`,{method: 'PUT', withCredentials: true});
+    dispatch(subscription(channel._id));
   }
   return (
     <Container className="md:flex-row">
@@ -204,7 +211,7 @@ const Video = () => {
               {currentvideo && currentvideo.likes.includes(currentuser?._id) ? (<ThumbUpIcon />) : (<ThumbUpOutlinedIcon className="" />)}{currentvideo && currentvideo.likes.length}
             </Button>
             <Button onClick={handleDislike}>
-            {currentvideo && currentvideo.likes?.includes(currentuser?._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon className="" />)}{currentvideo && currentvideo?.likes.length}
+            {currentvideo && currentvideo.dislikes?.includes(currentuser?._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon className="" />)}
               {/* <ThumbDownOffAltOutlinedIcon /> */}
               <span className="hidden md:block">Dislike</span> 
             </Button>
@@ -231,7 +238,7 @@ const Video = () => {
             </ChannelDetail>
           </ChannelInfo>
           <div className="flex-1 my-[20px] md:my-[0px] flex justify-center">
-            <Subscribe className="w-[100%] sm:w-[100%]">SUBSCRIBE</Subscribe>
+            <Subscribe onClick={handleSub} className="w-[100%] sm:w-[100%]">{currentuser.subscribedUsers?.includes(channel?._id) ?"SUBSCRIBED" : "SUBSCRIBE"}</Subscribe>
           </div>
         </Channel>
         <Hr />
@@ -239,7 +246,7 @@ const Video = () => {
       </Content>
       <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
         <p className="text-white mb-[10px]">Recommended Videos</p>
-        <div className="flex items-center flex-row md:flex-col w-[500px] overflow-x-scroll px-[10px] ">
+        <div className="flex md:items-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
           {randomvideos.map((video, index) => (
             <Recommended key={index} video={video} />
           ))}

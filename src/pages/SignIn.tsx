@@ -139,6 +139,4 @@ const SignIn = () => {
 
 export default SignIn;
 
-function parseCookie(mytoken: string | undefined) {
-  throw new Error("Function not implemented.");
-}
+

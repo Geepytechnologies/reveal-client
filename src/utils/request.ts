@@ -27,10 +27,15 @@ export const requestSlice = createSlice({
     state.loading = false;
     state.error = true;
     state.errormessage = action.payload;
+   },
+   requestinitial: (state) =>{
+    state.loading = false;
+    state.error = false;
+    state.errormessage = '';
    }
   },
 })
 
-export const {requestStart, requestSuccess, requestFailure} = requestSlice.actions;
+export const {requestStart, requestSuccess, requestFailure, requestinitial} = requestSlice.actions;
 
 export default requestSlice.reducer;

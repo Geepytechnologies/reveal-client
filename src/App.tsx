@@ -12,12 +12,13 @@ import Smallmenu from "./components/Smallmenu";
 import RecommendedVideos from "./pages/RecommendedVideos";
 import Page404 from "./components/Page404";
 import SignUp from "./pages/Signup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginStart, loginSuccess, logout } from "./utils/userSlice";
 import { persistor } from "./utils/store";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Profile from "./components/Profile";
+import Addvideo from "./components/Addvideo";
 
 const Container = styled.div`
  display: flex;
@@ -36,7 +37,8 @@ background-color: ${({ theme }) => theme.bg};
 `;
 
 function App() {
-  const [darkMode, setDarkMode] = useState(true);
+  // const [darkMode, setDarkMode] = useState(true);
+  const {darkMode} = useSelector((state:any) => state.mode);
   const dispatch = useDispatch();
   const domain = import.meta.env.VITE_DOMAIN;
 
@@ -61,11 +63,11 @@ function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <BrowserRouter>
         <Container>
-          <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
+          <Menu  />
           <Main>
             <Navbar />
             <div className="flex relative w-[100%]">
-              <Smallmenu darkMode={darkMode} setDarkMode={setDarkMode} />
+              <Smallmenu  />
               <Wrapper>
                 <Routes>
                   <Route path="/">
@@ -76,6 +78,7 @@ function App() {
                     <Route path="signin" element={<SignIn />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="signUp" element={<SignUp />} />
+                    <Route path="upload" element={<Addvideo />} />
                     <Route path="videos">
                       <Route path=":id" element={<Video />} />
                     </Route>

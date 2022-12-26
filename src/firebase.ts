@@ -5,7 +5,7 @@ const apikey = import.meta.env.VITE_API_KEY;
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCyZNxn-7ocxvfO4ndH0cedYcGcs6Ky0gU",
+  apiKey: apikey,
   authDomain: "reveal-com-ng.firebaseapp.com",
   projectId: "reveal-com-ng",
   storageBucket: "reveal-com-ng.appspot.com",

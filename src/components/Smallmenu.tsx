@@ -18,7 +18,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import {CiPlay1} from "react-icons/ci";
 import { Link } from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import { toggleMode } from "../utils/mode";
 
 
 const Container = styled.div`
@@ -120,8 +121,13 @@ interface props {
   setDarkMode: (darkMode: boolean) => void;
 }
 
-const Smallmenu = ({ darkMode, setDarkMode }:props) => {
+const Smallmenu = () => {
+  const dispatch = useDispatch();
   const {show} = useSelector((state:any)=>state.menu);
+  const {darkMode} = useSelector((state:any)=>state.mode);
+  const handletoggle = ()=>{
+    dispatch(toggleMode());
+  }
   return (
     <>
       {show && <Container>
@@ -131,18 +137,23 @@ const Smallmenu = ({ darkMode, setDarkMode }:props) => {
             <img src="/logowhite.png" className="w-[40px] h-[40px]" />
           </Logo>
         </Link>
-        <Item>
-          <HomeIcon />
-          {/* Home */}
-        </Item>
+        <Link to="/">
+          <Item>
+            <HomeIcon />
+          </Item>
+        </Link>
+        <Link to="trending">
         <Item>
           <ExploreOutlinedIcon />
           {/* Explore */}
         </Item>
-        <Item>
-          <SubscriptionsOutlinedIcon />
-          {/* Subscriptions */}
-        </Item>
+        </Link>
+        <Link to="subscriptions">
+          <Item>
+            <SubscriptionsOutlinedIcon />
+            {/* Subscriptions */}
+          </Item>
+        </Link>
         <Hr />
         <Item>
           <VideoLibraryOutlinedIcon />
@@ -191,7 +202,7 @@ const Smallmenu = ({ darkMode, setDarkMode }:props) => {
           <HelpOutlineOutlinedIcon />
           {/* Help */}
         </Item>
-        <Item onClick={() => setDarkMode(!darkMode)}>
+        <Item onClick={handletoggle}>
           <SettingsBrightnessOutlinedIcon />
           {darkMode ? "Light" : "Dark"} Mode
         </Item>
