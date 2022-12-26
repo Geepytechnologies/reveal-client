@@ -18,6 +18,7 @@ import app from "../firebase"
 const Container = styled.div`
 width: 100%;
 background-color: #000000a7;
+height: auto;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -25,16 +26,20 @@ overflow-y: scroll;
 `;
 
 const Wrapper = styled.div`
-width: 80%;
+width: 100%;
 height: auto;
-background-color: ${({ theme }) => theme.bgLighter};
+background-color: ${({ theme }) => theme.bg};
 color: ${({ theme }) => theme.text};
 padding: 20px;
 display: flex;
 flex-direction: column;
 overflow-y: scroll;
 gap: 20px;
-margin: 40px 0px;
+margin: 40px 10px;
+//md
+@media screen and (min-width: 768px) {
+    width: 80%;
+}
 `;
 const Close = styled.div`
 position: absolute;
@@ -47,14 +52,14 @@ text-align: center;
 `;
 
 const Input = styled.input`
-border: 1px solid ${({ theme }) => theme.soft};
+border: 1px solid ${({ theme }) => theme.text};
 color: ${({ theme }) => theme.text};
 border-radius: 3px;
 padding: 10px;
 background-color: transparent;
 `;
 const Desc = styled.textarea`
-border: 1px solid ${({ theme }) => theme.soft};
+border: 1px solid ${({ theme }) => theme.text};
 color: ${({ theme }) => theme.text};
 border-radius: 3px;
 padding: 10px;
@@ -104,13 +109,13 @@ const Addvideo = () => {
       (snapshot: { bytesTransferred: number; totalBytes: number; state: any; }) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));
+        urlType === "imgURL" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
+            // console.log("Upload is paused");
             break;
           case "running":
-            console.log("Upload is running");
+            // console.log("Upload is running");
             break;
           default:
             break;
@@ -133,7 +138,6 @@ const Addvideo = () => {
   useEffect(() => {
     img && uploadFile(img, "imgURL");
   }, [img]);
- console.log(inputs)
   const handleUpload = async (e: { preventDefault: () => void; })=>{
     e.preventDefault();
     const res = await axios.post(`${domain}/api/videos`, {...inputs, tags}, {withCredentials: true})
@@ -143,7 +147,6 @@ const Addvideo = () => {
   return (
     <Container>
       <Wrapper>
-        {/* <Close onClick={() => setOpen(false)}>X</Close> */}
         <div className='flex items-center justify-center'>
           <div className="bg-[url('cinematicview.png')] bg-center bg-contain h-[50px] w-[50px] mr-[10px]"></div>
           <Title className='font-[600]'>Upload a New Video</Title>
@@ -185,7 +188,7 @@ const Addvideo = () => {
             onChange={(e:any) => setImg(e.target.files[0])}
           />
         )}
-        <Button onClick={handleUpload}>Upload</Button>
+        {(imgPerc && videoPerc) !== 100 ? null : <Button onClick={handleUpload}>Upload</Button>}
       </Wrapper>
     </Container>
   )

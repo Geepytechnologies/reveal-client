@@ -94,6 +94,10 @@ const Logotext = styled.p`
   color: ${({ theme }) => theme.text};
   font-size: 18px;
 `;
+const Text = styled.p`
+  color: ${({ theme }) => theme.text};
+  font-size: 18px;
+`;
 
 
 const Navbar = () => {
@@ -131,17 +135,14 @@ const Navbar = () => {
                <Avatar src={currentuser.img} />
             </div>
             </Link>
-
-
-
-            <p className="text-white">{currentuser.username}</p>
+            <Text className="">{currentuser.username}</Text>
           </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>
           <Button>
             <AccountCircleOutlinedIcon />
             SIGN IN
-          </Button>1
+          </Button>
         </Link>
         )}
         </div>

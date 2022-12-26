@@ -176,8 +176,9 @@ const Profile = (props: Props) => {
             <Hr />
             {/* my uploads */}
             <div>
-                <Text className='font-[600] mb-[5px]'>My Uploads</Text>
-                {!videos.length && <Text>You don&apos;t have any Video yet</Text>}
+                  <Text className='font-[600] ml-[5px]'>My Uploads</Text>
+                <div className='flex gap-3 flex-col'>
+                {!videos?.length && <Text>You don&apos;t have any Video yet</Text>}
                 <div className='mt-[10px]'>
                     {/* map */}
                     {videos && videos.map((video: any)=>
@@ -199,6 +200,7 @@ const Profile = (props: Props) => {
                     <Hr className='' />
                     </>
                     )}
+                </div>
                 </div>
             </div>
             <Logout className='rounded-lg w-[200px] px-[5px] py-[10px]' onClick={handleClick}>Logout</Logout>

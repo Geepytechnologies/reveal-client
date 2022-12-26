@@ -45,7 +45,7 @@ function App() {
   useEffect(()=>{
     const checkuser = async ()=>{
       try{
-        await axios.get(`${domain}/api/users/check`, {withCredentials: true})
+        await axios.get(`${domain}/api/users`, {withCredentials: true})
       }catch(error: any){
         dispatch(logout());
       }
@@ -70,7 +70,8 @@ function App() {
               <Smallmenu  />
               <Wrapper>
                 <Routes>
-                  <Route path="/">
+                  <Route path="*" element={<Page404 />} />
+                  <Route  path="/">
                     <Route index element={<Home type="random" />} />
                     <Route path="*" element={<Page404 />} />
                     <Route path="trending" element={<Home type="trending" />} />

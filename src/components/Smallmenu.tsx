@@ -38,7 +38,9 @@ const Container = styled.div`
   hsl(250deg 78% 69%) 79%,
   hsl(228deg 90% 67%) 100%
 );
-  height: 100vh;
+  min-height: 100vh;
+  /* height: 1000px; */
+  height: auto;
   display: flex;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
@@ -47,7 +49,7 @@ const Container = styled.div`
   min-width: 50px;
   position: sticky;
   border-right: 2px solid ${({ theme }) => theme.soft};
-  top: 0px;
+  /* top: 0px; */
    //md
    @media screen and (min-width: 768px) {
     display: none;
@@ -84,9 +86,9 @@ const Item = styled.div`
     align-items: center;
   }
 
-  &:hover {
+  /* &:hover {
     background-color: ${({ theme }) => theme.soft};
-  }
+  } */
 `;
 
 const Hr = styled.hr`
@@ -130,7 +132,8 @@ const Smallmenu = () => {
   }
   return (
     <>
-      {show && <Container>
+      {show && 
+      <Container>
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
@@ -202,9 +205,9 @@ const Smallmenu = () => {
           <HelpOutlineOutlinedIcon />
           {/* Help */}
         </Item>
-        <Item onClick={handletoggle}>
+        <Item className="items-center" onClick={handletoggle}>
           <SettingsBrightnessOutlinedIcon />
-          {darkMode ? "Light" : "Dark"} Mode
+          <p className="text-center">{darkMode ? "Light" : "Dark"} Mode</p>
         </Item>
       </Wrapper>
       </Container>}
