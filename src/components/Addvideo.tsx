@@ -148,7 +148,7 @@ const Addvideo = () => {
     <Container>
       <Wrapper>
         <div className='flex items-center justify-center'>
-          <div className="bg-[url('cinematicview.png')] bg-center bg-contain h-[50px] w-[50px] mr-[10px]"></div>
+          <div className="bg-[url('/cinematicview.png')] bg-center bg-contain h-[50px] w-[50px] mr-[10px]"></div>
           <Title className='font-[600]'>Upload a New Video</Title>
         </div>
         <Label>Video:</Label>

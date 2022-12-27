@@ -61,7 +61,7 @@ function App() {
   
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-        <BrowserRouter>
+        <BrowserRouter basename="/">
         <Container>
           <Menu  />
           <Main>
