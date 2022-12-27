@@ -159,6 +159,7 @@ const SignUp = () => {
         img: result.user.photoURL
       }).then((res)=>{
         dispatch(loginSuccess(res.data))
+        navigate('/');
       })
      })
      .catch((error)=>{

@@ -157,7 +157,7 @@ const Profile = (props: Props) => {
         </DialogActions>
       </Dialog>
     <div className=' flex flex-col  pb-[50px] '>
-        <div className="w-[100%] blur-[2px]  border-white min-h-[300px] bg-[url('/cinematicview.png')] bg-center ">
+        <div className="w-[100%] blur-[2px] bg-cover  border-white min-h-[300px] bg-[url('/cinematicview.png')] bg-center ">
         </div>
         <div className='flex gap-3 flex-col z-[50] pl-[10px] mt-[-40px] w-[80%]'>
             <div className='flex flex-col'>
@@ -176,7 +176,10 @@ const Profile = (props: Props) => {
             <Hr />
             {/* my uploads */}
             <div>
-                  <Text className='font-[600] ml-[5px]'>My Uploads</Text>
+                <div className='flex'>
+                <div className="bg-[url('/cinematicview.png')] bg-center h-[150px] w-[150px] bg-cover "></div>
+                <Text className='font-[600] ml-[5px]'>My Uploads</Text>
+                </div>
                 <div className='flex gap-3 flex-col'>
                 {!videos?.length && <Text>You don&apos;t have any Video yet</Text>}
                 <div className='mt-[10px]'>
