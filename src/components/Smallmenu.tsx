@@ -38,7 +38,7 @@ const Container = styled.div`
   hsl(250deg 78% 69%) 79%,
   hsl(228deg 90% 67%) 100%
 );
-  min-height: 100vh;
+  max-height: 100vh;
   /* height: 1000px; */
   height: auto;
   display: flex;
@@ -49,7 +49,7 @@ const Container = styled.div`
   min-width: 50px;
   position: sticky;
   border-right: 2px solid ${({ theme }) => theme.soft};
-  /* top: 0px; */
+  top: 0px;
    //md
    @media screen and (min-width: 768px) {
     display: none;

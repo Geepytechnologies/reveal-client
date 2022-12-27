@@ -156,10 +156,10 @@ const Profile = (props: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    <div className=' flex flex-col pb-[50px] '>
-        <div className="w-[100%] blur-[2px]  border-white min-h-[300px] bg-[url('cinematicview.png')] bg-center ">
+    <div className=' flex flex-col  pb-[50px] '>
+        <div className="w-[100%] blur-[2px]  border-white min-h-[300px] bg-[url('/cinematicview.png')] bg-center ">
         </div>
-        <div className='flex gap-3 flex-col z-[50] mt-[-40px] w-[80%]'>
+        <div className='flex gap-3 flex-col z-[50] pl-[10px] mt-[-40px] w-[80%]'>
             <div className='flex flex-col'>
                 <Userimg className='h-[150px] border-2 border-white rounded-full w-[150px]' src={currentuser.img} alt="Profile" />
                 <Username className='font-[600]'>{currentuser.username}</Username>
@@ -181,9 +181,9 @@ const Profile = (props: Props) => {
                 {!videos?.length && <Text>You don&apos;t have any Video yet</Text>}
                 <div className='mt-[10px]'>
                     {/* map */}
-                    {videos && videos.map((video: any)=>
+                    {videos && videos.map((video: any, index: number)=>
                     <>
-                    <div className='flex '>
+                    <div key={index} className='flex '>
                        <div className='h-[100px] w-[100px] mr-[10px]'>
                         <img src={video?.imgURL} className="w-[100%] h-[100%]" />
                        </div>

@@ -246,7 +246,7 @@ const Video = () => {
       </Content>
       <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
         <p className="text-white mb-[10px]">Recommended Videos</p>
-        <div className="flex md:items-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
+        <div className="flex md:items-center justify-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
           {randomvideos.map((video, index) => (
             <Recommended key={index} video={video} />
           ))}
