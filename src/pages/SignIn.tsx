@@ -104,7 +104,8 @@ const SignIn = () => {
         email: result.user.email,
         img: result.user.photoURL
       }).then((res)=>{
-        dispatch(loginSuccess(res.data))
+        dispatch(loginSuccess(res.data));
+        navigate('/');  
       })
      })
      .catch((error)=>{

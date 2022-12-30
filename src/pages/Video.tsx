@@ -41,6 +41,12 @@ const VideoWrapper = styled.div`
  justify-content: center;
 `;
 
+const VideoFrame = styled.video`
+  max-height: 450px;
+  width: 95%;
+  object-fit: contain;
+`;
+
 const Title = styled.h1`
   font-size: 18px;
   font-weight: 400;
@@ -91,7 +97,7 @@ const Channel = styled.div`
   flex-direction: column;
   justify-content: space-around;
   padding: 5px;
-  width: 50%;
+  width: 70%;
   //md
   @media screen and (min-width: 768px) {
     flex-direction: row;
@@ -169,12 +175,20 @@ const Video = () => {
     fetchData();
   },[path, dispatch]);
   const [randomvideos, setRandomVideos] = useState([]);
+  const [recommendedvideos, setRecommendedVideos] = useState([]);
   useEffect(()=>{
      const fetchVideos = async ()=>{
       const res = await axios.get(`${domain}/api/videos/random`);
       setRandomVideos(res.data);
      }
      fetchVideos();
+  },[])
+  useEffect(()=>{
+    const fetchRecommendedVideos = async ()=>{
+      const res = await axios.get(`${domain}/api/videos/tags?tags=${currentvideo?.tags}`);
+      setRecommendedVideos(res.data);
+     }
+    fetchRecommendedVideos();
   },[])
   const handleLike = async ()=>{
     await axios(`${domain}/api/users/like/${currentvideo._id}`, {method: 'PUT', withCredentials: true})
@@ -193,15 +207,7 @@ const Video = () => {
     <Container className="md:flex-row">
       <Content>
         <VideoWrapper>
-          <iframe
-            className="h-[350px] md:h-[500px]"
-            width="90%"
-            
-            src={currentvideo?.videoURL}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+           <VideoFrame src={currentvideo?.videoURL} controls />
         </VideoWrapper>
         <Title>{currentvideo?.title}</Title>
         <Details>
@@ -247,7 +253,7 @@ const Video = () => {
       <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
         <p className="text-white mb-[10px]">Recommended Videos</p>
         <div className="flex md:items-center justify-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
-          {randomvideos.map((video, index) => (
+          {randomvideos.filter((element:any)=>element?._id !== currentvideo?._id).map((video, index) => (
             <Recommended key={index} video={video} />
           ))}
         </div>

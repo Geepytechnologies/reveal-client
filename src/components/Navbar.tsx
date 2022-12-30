@@ -135,7 +135,7 @@ const Navbar = () => {
                <Avatar src={currentuser.img} />
             </div>
             </Link>
-            <Text className="">{currentuser.username}</Text>
+            <Text className="">{(currentuser.username).split(' ')[0]}</Text>
           </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>
