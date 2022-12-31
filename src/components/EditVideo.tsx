@@ -142,9 +142,9 @@ const EditVideo = () => {
   }, [img]);
   const handleUpload = async (e: { preventDefault: () => void; })=>{
     e.preventDefault();
-    const res = await axios.put(`${domain}/api/videos/${videotoedit._id}`, {...inputs, tags}, {withCredentials:true})
+    const res = await axios.put(`${domain}/api/videos/${videotoedit._id}`, {...inputs, tags}, {method: "PUT",withCredentials:true})
     // setOpen(false)
-    res.status === 200 && navigate(`/videos/${res.data._id}`)
+    res.status === 200 && navigate(`/profile`)
   }
   return (
     <Container>
