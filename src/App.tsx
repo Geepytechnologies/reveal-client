@@ -19,6 +19,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Profile from "./components/Profile";
 import Addvideo from "./components/Addvideo";
+import EditVideo from "./components/EditVideo";
 
 const Container = styled.div`
  display: flex;
@@ -80,6 +81,7 @@ function App() {
                     <Route path="profile" element={<Profile />} />
                     <Route path="signUp" element={<SignUp />} />
                     <Route path="upload" element={<Addvideo />} />
+                    <Route path="edit" element={<EditVideo />} />
                     <Route path="videos">
                       <Route path=":id" element={<Video />} />
                     </Route>

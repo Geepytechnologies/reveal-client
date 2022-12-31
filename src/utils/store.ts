@@ -5,6 +5,7 @@ import videoReducer from '../utils/videoSlice'
 import requestReducer from "../utils/request"
 import modeReducer from "../utils/mode";
 import deleteReducer from "../utils/deletevideo";
+import editReducer from "../utils/editvideo";
 import uservideoReducer from "../utils/uservideos";
 import {
     persistStore,
@@ -23,7 +24,7 @@ const persistConfig = {
     storage,
     whitelist: ['user','menu','mode'],
 } ;
-const rootReducer = combineReducers({user: userReducer, menu: menuReducer, video: videoReducer, request: requestReducer, mode:modeReducer, delete:deleteReducer, uservideos: uservideoReducer})
+const rootReducer = combineReducers({user: userReducer, menu: menuReducer, video: videoReducer, request: requestReducer, mode:modeReducer, delete:deleteReducer, uservideos: uservideoReducer, edit: editReducer,})
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({

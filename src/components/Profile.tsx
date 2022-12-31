@@ -16,6 +16,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { assign } from '../utils/deletevideo';
 import { fetchFailure, fetchStart, fetchSuccess } from '../utils/uservideos';
+import { assignedit } from '../utils/editvideo';
 
 
 function AlertDialog() {
@@ -133,6 +134,10 @@ const Profile = (props: Props) => {
     handleClose();
     navigate(0);
   }
+  const handleEdit = (video:any)=>{
+     dispatch(assignedit(video));
+     navigate('/edit')
+  }
   return (
     <>
     <Dialog
@@ -176,8 +181,8 @@ const Profile = (props: Props) => {
             <Hr />
             {/* my uploads */}
             <div>
-                <div className='flex'>
-                <div className="bg-[url('/cinematicview.png')] bg-center h-[150px] w-[150px] bg-cover "></div>
+                <div className='flex items-center'>
+                <div className="bg-[url('/cinematicview.png')] bg-center h-[30px] w-[30px] bg-cover "></div>
                 <Text className='font-[600] ml-[5px]'>My Uploads</Text>
                 </div>
                 <div className='flex gap-3 flex-col'>
@@ -185,23 +190,26 @@ const Profile = (props: Props) => {
                 <div className='mt-[10px]'>
                     {/* map */}
                     {videos && videos.map((video: any, index: number)=>
-                    <>
-                    <div key={index} className='flex '>
-                       <div className='h-[100px] w-[100px] mr-[10px]'>
-                        <img src={video?.imgURL} className="w-[100%] h-[100%]" />
-                       </div>
-                       <div className='flex flex-col justify-between'>
-                        <Text className='font-[600]'>{video?.title}</Text>
-                        <Text className='text-[16px] font-[400]'>{video?.desc}</Text>
-                        <div className='flex'>
-                           <VisibilityIcon className={darkMode ? "text-white" : "text-black"} />
-                           <Text className='text-[14px] ml-[5px]'>{video?.views} Views</Text>
+                    <div key={index}>
+                        <div  className='flex '>
+                        <div className='h-[100px] w-[100px] mr-[10px]'>
+                            <img src={video?.imgURL} className="w-[100%] h-[100%]" />
                         </div>
-                        <DeleteIcon onClick={()=>handleOpen(video._id)}  className='text-[var(--secondary)] mt-[10px]' />
-                       </div>
-                    </div>
+                        <div className='flex flex-col justify-between'>
+                            <Text className='font-[600]'>{video?.title}</Text>
+                            <Text className='text-[16px] font-[400]'>{video?.desc}</Text>
+                            <div className='flex'>
+                            <VisibilityIcon className={darkMode ? "text-white" : "text-black"} />
+                            <Text className='text-[14px] ml-[5px]'>{video?.views} Views</Text>
+                            </div>
+                            <div className='flex items-center mt-[10px]'>
+                            <DeleteIcon onClick={()=>handleOpen(video._id)}  className='text-[var(--secondary)]  mr-[5px]' />
+                            <EditIcon onClick={()=>handleEdit(video)} className={(darkMode ? "text-white" : "text-dark")} />
+                            </div>
+                        </div>
+                        </div>
                     <Hr className='' />
-                    </>
+                    </div>
                     )}
                 </div>
                 </div>

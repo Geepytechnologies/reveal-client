@@ -8,7 +8,7 @@ import Comments from "../components/Comments";
 import Card from "../components/Card";
 import eyedrop from "../img/eyedrop.png";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { dislike, fetchSuccess, like } from "../utils/videoSlice";
 import { format } from "timeago.js";
@@ -158,6 +158,7 @@ const Video = () => {
   const {currentuser}  = useSelector((state:any)=>state.user);
   const {currentvideo}  = useSelector((state:any)=>state.video);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const path = useLocation().pathname.split('/')[2];
   const [channel, setChannel] = useState<any | null>(null);
   useEffect(() => {
@@ -203,11 +204,27 @@ const Video = () => {
     await axios(`${domain}/api/users/unsubscribe/${channel._id}`,{method: 'PUT', withCredentials: true}) : await axios(`${domain}/api/users/subscribe/${channel._id}`,{method: 'PUT', withCredentials: true});
     dispatch(subscription(channel._id));
   }
+  const handleUpdate = async (e:any)=>{
+     const video = e.target;
+     const currentTime = video.currentTime;
+     const duration = video.duration;
+     if(currentvideo.viewers.includes(currentuser._id)){
+      return null;
+     }else{
+      if(currentTime / duration >= 0.1){
+       await axios(`${domain}/api/videos/view/${currentvideo._id}`,  {method: 'PUT', withCredentials: true})
+     }
+     }
+  }
+  useEffect(()=>{
+    !currentuser && navigate('/signin')
+  },[])
   return (
+    <>
     <Container className="md:flex-row">
       <Content>
         <VideoWrapper>
-           <VideoFrame src={currentvideo?.videoURL} controls />
+           <VideoFrame onTimeUpdate={(e)=>handleUpdate(e)} src={currentvideo?.videoURL} controls />
         </VideoWrapper>
         <Title>{currentvideo?.title}</Title>
         <Details>
@@ -244,14 +261,14 @@ const Video = () => {
             </ChannelDetail>
           </ChannelInfo>
           <div className="flex-1 my-[20px] md:my-[0px] flex justify-center">
-            <Subscribe onClick={handleSub} className="w-[100%] sm:w-[100%]">{currentuser.subscribedUsers?.includes(channel?._id) ?"SUBSCRIBED" : "SUBSCRIBE"}</Subscribe>
+            {currentuser?._id !== channel?._id && <Subscribe onClick={handleSub} className="w-[100%] sm:w-[100%]">{currentuser?.subscribedUsers?.includes(channel?._id) ?"SUBSCRIBED" : "SUBSCRIBE"}</Subscribe>}
           </div>
         </Channel>
         <Hr />
         <Comments videoID={path} />
       </Content>
       <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
-        <p className="text-white mb-[10px]">Recommended Videos</p>
+        {recommendedvideos.length && <p className="text-white mb-[10px]">Recommended Videos</p>}
         <div className="flex md:items-center justify-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
           {randomvideos.filter((element:any)=>element?._id !== currentvideo?._id).map((video, index) => (
             <Recommended key={index} video={video} />
@@ -259,6 +276,7 @@ const Video = () => {
         </div>
       </Recommendation>
     </Container>
+  </>
   );
 };
 
