@@ -3,7 +3,7 @@ import styled, { ThemeProvider } from "styled-components";
 import Menu from "./components/Menu";
 import Navbar from "./components/Navbar";
 import { darkTheme, lightTheme } from "./utils/Theme";
-import { HashRouter, Routes, Route} from "react-router-dom";
+import {MemoryRouter, HashRouter, Routes, Route} from "react-router-dom";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
 import SignIn from "./pages/SignIn";
@@ -62,7 +62,7 @@ function App() {
   
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-        <HashRouter basename="/">
+        <MemoryRouter initialEntries={['/']}>
         <Container>
           <Menu  />
           <Main>
@@ -94,7 +94,7 @@ function App() {
             </div>
           </Main>
         </Container>
-        </HashRouter>
+        </MemoryRouter>
     </ThemeProvider>
   );
 }

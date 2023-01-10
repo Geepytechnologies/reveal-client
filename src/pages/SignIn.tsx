@@ -76,10 +76,15 @@ const Links = styled.div`
   margin-left: 30px;
 `;
  */
+type UserCredential = {
+  _tokenResponse: any
+}
+
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [img, setImg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async(e: { preventDefault: () => void; }) =>{
@@ -97,20 +102,48 @@ const SignIn = () => {
   }
   const signInWithGoogle = async ()=>{
     dispatch(loginStart());
-    signInWithPopup(auth, provider)
-     .then((result)=>{
-      axios.post(`${domain}/api/auth/googleauth`, {
-        username: result.user.displayName,
-        email: result.user.email,
-        img: result.user.photoURL
-      }).then((res)=>{
-        dispatch(loginSuccess(res.data));
-        navigate('/');  
-      })
-     })
-     .catch((error)=>{
-       dispatch(loginFailure());
-     });
+    // signInWithPopup(auth, provider)
+    //  .then((result)=>{
+    //   setUsername(String(result.user.displayName));
+    //   setImg(String(result.user.photoURL));
+    //   setEmail(String(result.user.email));
+    //  }).then(()=>{
+    //   axios.post(`${domain}/api/auth/googleauth`,{username,img,email});
+    //  }).then((res)=>{
+    //   // dispatch(loginSuccess(res.data));
+    //   console.log(res)
+    //  })
+    //  const res = await signInWithPopup(auth, provider)
+    //  setUsername(String(res.user.displayName));
+    // setImg(String(res.user.photoURL));
+    // setEmail(String(res.user.email));
+    // if(username){
+      try{
+      const user = await axios.post(`${domain}/api/auth/googleauth`,{username: "Geepy"});
+      if(user){
+        dispatch(loginSuccess(user.data))
+        navigate('/');
+        console.log(user.data)
+        // console.log({username, img, email})
+      }
+    }catch(err){
+      dispatch(loginFailure())
+    }
+  // }
+    // signInWithPopup(auth, provider)
+    //  .then((result)=>{
+    //   axios.post(`${domain}/api/auth/googleauth`, {
+    //     username: result.user.displayName,
+    //     email: result.user.email,
+    //     img: result.user.photoURL
+    //   }).then((res)=>{
+    //     dispatch(loginSuccess(res.data));
+    //     navigate('/');  
+    //   })
+    //  })
+    //  .catch((error)=>{
+    //    dispatch(loginFailure());
+    //  });
   }
   return (
     <Container>
