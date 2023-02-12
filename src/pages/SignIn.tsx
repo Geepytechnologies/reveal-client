@@ -1,15 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../utils/userSlice";
-import {auth, provider} from "../firebase"
-import {signInWithPopup} from "firebase/auth"
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 import { Link, Path, useNavigate } from "react-router-dom";
-import google from "../img/google.png"
+import google from "../img/google.png";
 const domain = import.meta.env.VITE_DOMAIN;
-
-
 
 const Container = styled.div`
   display: flex;
@@ -77,8 +75,8 @@ const Links = styled.div`
 `;
  */
 type UserCredential = {
-  _tokenResponse: any
-}
+  _tokenResponse: any;
+};
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
@@ -87,20 +85,24 @@ const SignIn = () => {
   const [img, setImg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleLogin = async(e: { preventDefault: () => void; }) =>{
+  const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(loginStart())
-    try{
-      const res = await axios.post(`${domain}/api/auth/signin`,{username,password},{
-        withCredentials: true,
-      })
-      dispatch(loginSuccess(res.data))
-      navigate('/');
-    }catch(err){
-      dispatch(loginFailure())
+    dispatch(loginStart());
+    try {
+      const res = await axios.post(
+        `${domain}/api/auth/signin`,
+        { username, password },
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(loginSuccess(res.data));
+      navigate("/");
+    } catch (err) {
+      dispatch(loginFailure());
     }
-  }
-  const signInWithGoogle = async ()=>{
+  };
+  const signInWithGoogle = async () => {
     dispatch(loginStart());
     // signInWithPopup(auth, provider)
     //  .then((result)=>{
@@ -118,51 +120,69 @@ const SignIn = () => {
     // setImg(String(res.user.photoURL));
     // setEmail(String(res.user.email));
     // if(username){
-      try{
-      const user = await axios.post(`${domain}/api/auth/googleauth`,{username: "Geepy"});
-      if(user){
-        dispatch(loginSuccess(user.data))
-        navigate('/');
-        console.log(user.data)
-        // console.log({username, img, email})
-      }
-    }catch(err){
-      dispatch(loginFailure())
-    }
-  // }
-    // signInWithPopup(auth, provider)
-    //  .then((result)=>{
-    //   axios.post(`${domain}/api/auth/googleauth`, {
-    //     username: result.user.displayName,
-    //     email: result.user.email,
-    //     img: result.user.photoURL
-    //   }).then((res)=>{
-    //     dispatch(loginSuccess(res.data));
-    //     navigate('/');  
-    //   })
-    //  })
-    //  .catch((error)=>{
-    //    dispatch(loginFailure());
-    //  });
-  }
+
+    // }
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        axios
+          .post(`${domain}/api/auth/googleauth`, {
+            username: result.user.displayName,
+            email: result.user.email,
+            img: result.user.photoURL,
+          })
+          .then((res) => {
+            dispatch(loginSuccess(res.data));
+            navigate("/");
+          });
+      })
+      .catch((error) => {
+        dispatch(loginFailure());
+      });
+  };
   return (
     <Container>
       <Wrapper className="mybackground">
         <Title>Sign in</Title>
         <SubTitle>to Reveal</SubTitle>
-        <Input placeholder="username" onChange={(e)=>setUsername(e.target.value)} />
-        <Input type="password" placeholder="password" onChange={(e)=>setPassword(e.target.value)} />
+        <Input
+          placeholder="username"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
-        <div className="cursor-pointer rounded-xl bg-[white] text-[#999] w-[90%] flex items-center justify-center" onClick={signInWithGoogle}>continue with <span><img className="w-[20px] h-[20px] ml-[5px]" src={google} alt="google" /></span></div>
+        <div
+          className="cursor-pointer rounded-xl bg-[white] text-[#999] w-[90%] flex items-center justify-center"
+          onClick={signInWithGoogle}
+        >
+          continue with{" "}
+          <span>
+            <img
+              className="w-[20px] h-[20px] ml-[5px]"
+              src={google}
+              alt="google"
+            />
+          </span>
+        </div>
         <div className="mt-[5px]">
-          <p>Don&apos;t have an account? <Link to={"/signUp"}><span><button>Sign up</button></span></Link></p>
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link to={"/signUp"}>
+              <span>
+                <button>Sign up</button>
+              </span>
+            </Link>
+          </p>
         </div>
         <More>
           English(USA)
           <div className="ml-[50px]">
-            <p >Help</p>
-            <p >Privacy</p>
+            <p>Help</p>
+            <p>Privacy</p>
             <p>Terms</p>
           </div>
         </More>
@@ -172,5 +192,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-
