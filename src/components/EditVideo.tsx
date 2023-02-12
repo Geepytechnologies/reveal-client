@@ -1,85 +1,85 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
-    getStorage,
-    ref,
-    uploadBytesResumable,
-    getDownloadURL,
-  } from "firebase/storage";
-import app from "../firebase"
-import { useSelector } from 'react-redux';
-
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../firebase";
+import { useSelector } from "react-redux";
 
 /* type Props = {
     setOpen: (open: boolean) => void
 } */
 
 const Container = styled.div`
-width: 100%;
-background-color: #000000a7;
-height: auto;
-display: flex;
-align-items: center;
-justify-content: center;
-overflow-y: scroll;
+  width: 100%;
+  background-color: #000000a7;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
 `;
 
 const Wrapper = styled.div`
-width: 100%;
-height: auto;
-background-color: ${({ theme }) => theme.bg};
-color: ${({ theme }) => theme.text};
-padding: 20px;
-display: flex;
-flex-direction: column;
-overflow-y: scroll;
-gap: 20px;
-margin: 40px 10px;
-//md
-@media screen and (min-width: 768px) {
+  width: 100%;
+  height: auto;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  gap: 20px;
+  margin: 40px 10px;
+  //md
+  @media screen and (min-width: 768px) {
     width: 80%;
-}
+  }
 `;
 const Close = styled.div`
-position: absolute;
-top: 10px;
-right: 10px;
-cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 `;
 const Title = styled.h1`
-text-align: center;
+  text-align: center;
 `;
 
 const Input = styled.input`
-border: 1px solid ${({ theme }) => theme.text};
-color: ${({ theme }) => theme.text};
-border-radius: 3px;
-padding: 10px;
-background-color: transparent;
+  border: 1px solid ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
 `;
 const Desc = styled.textarea`
-border: 1px solid ${({ theme }) => theme.text};
-color: ${({ theme }) => theme.text};
-border-radius: 3px;
-padding: 10px;
-background-color: transparent;
+  border: 1px solid ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
 `;
 const Button = styled.button`
-border-radius: 3px;
-border: none;
-padding: 10px 20px;
-font-weight: 500;
-cursor: pointer;
-background-color: var(--secondary);
-color: white;
+  border-radius: 3px;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: var(--secondary);
+  color: white;
 `;
 const Label = styled.label`
-font-size: 14px;
+  font-size: 14px;
 `;
 const EditVideo = () => {
-  const {videotoedit} = useSelector((state:any)=>state.edit)
+  const { videotoedit } = useSelector((state: any) => state.edit);
+  const { currentuser } = useSelector((state: any) => state.user);
   const domain = import.meta.env.VITE_DOMAIN;
   const [img, setImg] = useState(undefined);
   const [video, setVideo] = useState();
@@ -90,17 +90,17 @@ const EditVideo = () => {
 
   const navigate = useNavigate();
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     setInputs((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
 
-  const handleTags = (e:any) => {
+  const handleTags = (e: any) => {
     setTags(e.target.value.split(","));
   };
   const uploadFile = (file: any, urlType: string) => {
-    const mydomain = "reveal.com.ng"
+    const mydomain = "reveal.com.ng";
     const storage = getStorage(app);
     const fileName = mydomain + new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
@@ -108,10 +108,16 @@ const EditVideo = () => {
 
     uploadTask.on(
       "state_changed",
-      (snapshot: { bytesTransferred: number; totalBytes: number; state: any; }) => {
+      (snapshot: {
+        bytesTransferred: number;
+        totalBytes: number;
+        state: any;
+      }) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        urlType === "imgURL" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));
+        urlType === "imgURL"
+          ? setImgPerc(Math.round(progress))
+          : setVideoPerc(Math.round(progress));
         switch (snapshot.state) {
           case "paused":
             // console.log("Upload is paused");
@@ -140,18 +146,22 @@ const EditVideo = () => {
   useEffect(() => {
     img && uploadFile(img, "imgURL");
   }, [img]);
-  const handleUpload = async (e: { preventDefault: () => void; })=>{
+  const handleUpload = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const res = await axios.put(`${domain}/api/videos/${videotoedit._id}`, {...inputs, tags}, {method: "PUT",withCredentials:true})
+    const res = await axios.put(
+      `${domain}/api/videos/${videotoedit._id}`,
+      { ...inputs, tags },
+      { method: "PUT", headers: { token: `Bearer ${currentuser.accessToken}` } }
+    );
     // setOpen(false)
-    res.status === 200 && navigate(`/profile`)
-  }
+    res.status === 200 && navigate(`/profile`);
+  };
   return (
     <Container>
       <Wrapper>
-        <div className='flex items-center justify-center'>
+        <div className="flex items-center justify-center">
           <div className="bg-[url('/cinematicview.png')] bg-center bg-contain h-[50px] w-[50px] mr-[10px]"></div>
-          <Title className='font-[600]'>Edit Video</Title>
+          <Title className="font-[600]">Edit Video</Title>
         </div>
         {/* <Label>Video:</Label>
         {videoPerc > 0 ? (
@@ -187,22 +197,22 @@ const EditVideo = () => {
           onChange={handleTags}
         />
         <Label>Image:</Label>
-        <img src={videotoedit.imgURL} className='w-[50px] h-[50px]' />
+        <img src={videotoedit.imgURL} className="w-[50px] h-[50px]" />
         {imgPerc > 0 ? (
           "Uploading: " + imgPerc + "%"
         ) : (
           <Input
             type="file"
             accept="image/*"
-            onChange={(e:any) => setImg(e.target.files[0])}
+            onChange={(e: any) => setImg(e.target.files[0])}
           />
         )}
-        {(imgPerc) !== 100 ? null : <Button onClick={handleUpload}>Upload</Button>}
+        {imgPerc !== 100 ? null : (
+          <Button onClick={handleUpload}>Upload</Button>
+        )}
       </Wrapper>
     </Container>
-  )
-}
+  );
+};
 
 export default EditVideo;
-
-

@@ -134,10 +134,12 @@ const Navbar = () => {
                   {/* <div className="absolute w-[100%] h-[100%] rounded-full top-0 flex items-center justify-center">
                 <p>{currentuser.username?.slice(0,1)}</p>
                 </div> */}
-                  <Avatar src={currentuser?.img} />
+                  <Avatar src={currentuser?.others.img} />
                 </div>
               </Link>
-              <Text className="">{currentuser?.username?.split(" ")[0]}</Text>
+              <Text className="">
+                {currentuser?.others.username?.split(" ")[0]}
+              </Text>
             </User>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>

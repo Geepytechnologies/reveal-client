@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
@@ -14,10 +14,9 @@ import { dislike, fetchSuccess, like } from "../utils/videoSlice";
 import { format } from "timeago.js";
 import Recommended from "../components/Recommended";
 import Cookies from "universal-cookie";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { subscription } from "../utils/userSlice";
-
 
 const Container = styled.div`
   display: flex;
@@ -36,9 +35,9 @@ const Content = styled.div`
   width: 100%;
 `;
 const VideoWrapper = styled.div`
- width: 100%;
- display: flex;
- justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const VideoFrame = styled.video`
@@ -155,128 +154,175 @@ const Subscribe = styled.button`
 
 const Video = () => {
   const domain = import.meta.env.VITE_DOMAIN;
-  const {currentuser}  = useSelector((state:any)=>state.user);
-  const {currentvideo}  = useSelector((state:any)=>state.video);
+  const { currentuser } = useSelector((state: any) => state.user);
+  const { currentvideo } = useSelector((state: any) => state.video);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const path = useLocation().pathname.split('/')[2];
+  const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState<any | null>(null);
   useEffect(() => {
-    const fetchData = async ()=>{
+    const fetchData = async () => {
       try {
         const videoRes = await axios.get(`${domain}/api/videos/find/${path}`);
-        const channelRes = await axios.get(`${domain}/api/users/find/${videoRes.data.userId}`);
+        const channelRes = await axios.get(
+          `${domain}/api/users/find/${videoRes.data.userId}`
+        );
         setChannel(channelRes.data);
-        dispatch(fetchSuccess(videoRes.data))
+        dispatch(fetchSuccess(videoRes.data));
         // console.log(videoRes.data)
-      }catch(err){
-          // console.log(err)
+      } catch (err) {
+        // console.log(err)
       }
     };
     fetchData();
-  },[path, dispatch]);
+  }, [path, dispatch]);
   const [randomvideos, setRandomVideos] = useState([]);
   const [recommendedvideos, setRecommendedVideos] = useState([]);
-  useEffect(()=>{
-     const fetchVideos = async ()=>{
+  useEffect(() => {
+    const fetchVideos = async () => {
       const res = await axios.get(`${domain}/api/videos/random`);
       setRandomVideos(res.data);
-     }
-     fetchVideos();
-  },[])
-  useEffect(()=>{
-    const fetchRecommendedVideos = async ()=>{
-      const res = await axios.get(`${domain}/api/videos/tags?tags=${currentvideo?.tags}`);
+    };
+    fetchVideos();
+  }, []);
+  useEffect(() => {
+    const fetchRecommendedVideos = async () => {
+      const res = await axios.get(
+        `${domain}/api/videos/tags?tags=${currentvideo?.tags}`
+      );
       setRecommendedVideos(res.data);
-     }
+    };
     fetchRecommendedVideos();
-  },[])
-  const handleLike = async ()=>{
-    await axios(`${domain}/api/users/like/${currentvideo._id}`, {method: 'PUT', withCredentials: true})
-    dispatch(like(currentuser._id))
-  }
-  const handleDislike = async ()=>{
-    await axios(`${domain}/api/users/dislike/${currentvideo._id}`,  {method: 'PUT',withCredentials: true})
-    dispatch(dislike(currentuser._id))
-  }
-  const handleSub = async ()=>{
-    currentuser.subscribedUsers.includes(channel._id) ? 
-    await axios(`${domain}/api/users/unsubscribe/${channel._id}`,{method: 'PUT', withCredentials: true}) : await axios(`${domain}/api/users/subscribe/${channel._id}`,{method: 'PUT', withCredentials: true});
+  }, []);
+  const handleLike = async () => {
+    await axios(`${domain}/api/users/like/${currentvideo._id}`, {
+      method: "PUT",
+      headers: { token: `Bearer ${currentuser.accessToken}` },
+    });
+    dispatch(like(currentuser.others._id));
+  };
+  const handleDislike = async () => {
+    await axios(`${domain}/api/users/dislike/${currentvideo._id}`, {
+      method: "PUT",
+      headers: { token: `Bearer ${currentuser.accessToken}` },
+    });
+    dispatch(dislike(currentuser.others._id));
+  };
+  const handleSub = async () => {
+    currentuser.others.subscribedUsers.includes(channel._id)
+      ? await axios(`${domain}/api/users/unsubscribe/${channel._id}`, {
+          method: "PUT",
+          headers: { token: `Bearer ${currentuser.accessToken}` },
+        })
+      : await axios(`${domain}/api/users/subscribe/${channel._id}`, {
+          method: "PUT",
+          headers: { token: `Bearer ${currentuser.accessToken}` },
+        });
     dispatch(subscription(channel._id));
-  }
-  const handleUpdate = async (e:any)=>{
-     const video = e.target;
-     const currentTime = video.currentTime;
-     const duration = video.duration;
-     if(currentvideo.viewers.includes(currentuser._id)){
+  };
+  const handleUpdate = async (e: any) => {
+    const video = e.target;
+    const currentTime = video.currentTime;
+    const duration = video.duration;
+    if (currentvideo.viewers.includes(currentuser?.others?._id)) {
       return null;
-     }else{
-      if(currentTime / duration >= 0.1){
-       await axios(`${domain}/api/videos/view/${currentvideo._id}`,  {method: 'PUT', withCredentials: true})
-     }
-     }
-  }
-  useEffect(()=>{
-    !currentuser && navigate('/signin')
-  },[])
+    } else {
+      if (currentTime / duration >= 0.1) {
+        await axios(`${domain}/api/videos/view/${currentvideo._id}`, {
+          method: "PUT",
+          headers: { token: `Bearer ${currentuser.accessToken}` },
+        });
+      }
+    }
+  };
+  useEffect(() => {
+    !currentuser && navigate("/signin");
+  }, []);
   return (
     <>
-    <Container className="md:flex-row">
-      <Content>
-        <VideoWrapper>
-           <VideoFrame onTimeUpdate={(e)=>handleUpdate(e)} src={currentvideo?.videoURL} controls />
-        </VideoWrapper>
-        <Title>{currentvideo?.title}</Title>
-        <Details>
-          <Info>{currentvideo?.views} views • {format(currentvideo?.createdAt)}</Info>
-          <Buttons>
-            <Button onClick={handleLike}>
-              {currentvideo && currentvideo.likes.includes(currentuser?._id) ? (<ThumbUpIcon />) : (<ThumbUpOutlinedIcon className="" />)}{currentvideo && currentvideo.likes.length}
-            </Button>
-            <Button onClick={handleDislike}>
-            {currentvideo && currentvideo.dislikes?.includes(currentuser?._id) ? (<ThumbDownIcon />) : (<ThumbDownOffAltOutlinedIcon className="" />)}
-              {/* <ThumbDownOffAltOutlinedIcon /> */}
-              <span className="hidden md:block">Dislike</span> 
-            </Button>
-            <Button>
-              <ReplyOutlinedIcon /> 
-              <span className="hidden md:block">Share</span> 
-            </Button>
-            <Button>
-              <AddTaskOutlinedIcon />
-              <span className="hidden md:block">Save</span> 
-            </Button>
-          </Buttons>
-        </Details>
-        <Hr />
-        <Channel>
-          <ChannelInfo>
-            <Image className="mybackground" src={channel?.img} />
-            <ChannelDetail>
-              <ChannelName>{channel?.username}</ChannelName>
-              <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
-              <Description>
-                {currentvideo?.desc}
-              </Description>
-            </ChannelDetail>
-          </ChannelInfo>
-          <div className="flex-1 my-[20px] md:my-[0px] flex justify-center">
-            {currentuser?._id !== channel?._id && <Subscribe onClick={handleSub} className="w-[100%] sm:w-[100%]">{currentuser?.subscribedUsers?.includes(channel?._id) ?"SUBSCRIBED" : "SUBSCRIBE"}</Subscribe>}
+      <Container className="md:flex-row">
+        <Content>
+          <VideoWrapper>
+            <VideoFrame
+              onTimeUpdate={(e) => handleUpdate(e)}
+              src={currentvideo?.videoURL}
+              controls
+            />
+          </VideoWrapper>
+          <Title>{currentvideo?.title}</Title>
+          <Details>
+            <Info>
+              {currentvideo?.views} views • {format(currentvideo?.createdAt)}
+            </Info>
+            <Buttons>
+              <Button onClick={handleLike}>
+                {currentvideo &&
+                currentvideo.likes.includes(currentuser?.others._id) ? (
+                  <ThumbUpIcon />
+                ) : (
+                  <ThumbUpOutlinedIcon className="" />
+                )}
+                {currentvideo && currentvideo.likes.length}
+              </Button>
+              <Button onClick={handleDislike}>
+                {currentvideo &&
+                currentvideo.dislikes?.includes(currentuser?.others._id) ? (
+                  <ThumbDownIcon />
+                ) : (
+                  <ThumbDownOffAltOutlinedIcon className="" />
+                )}
+                {/* <ThumbDownOffAltOutlinedIcon /> */}
+                <span className="hidden md:block">Dislike</span>
+              </Button>
+              <Button>
+                <ReplyOutlinedIcon />
+                <span className="hidden md:block">Share</span>
+              </Button>
+              <Button>
+                <AddTaskOutlinedIcon />
+                <span className="hidden md:block">Save</span>
+              </Button>
+            </Buttons>
+          </Details>
+          <Hr />
+          <Channel>
+            <ChannelInfo>
+              <Image className="mybackground" src={channel?.img} />
+              <ChannelDetail>
+                <ChannelName>{channel?.username}</ChannelName>
+                <ChannelCounter>
+                  {channel?.subscribers} subscribers
+                </ChannelCounter>
+                <Description>{currentvideo?.desc}</Description>
+              </ChannelDetail>
+            </ChannelInfo>
+            <div className="flex-1 my-[20px] md:my-[0px] flex justify-center">
+              {currentuser?.others._id !== channel?._id && (
+                <Subscribe onClick={handleSub} className="w-[100%] sm:w-[100%]">
+                  {currentuser?.others.subscribedUsers?.includes(channel?._id)
+                    ? "SUBSCRIBED"
+                    : "SUBSCRIBE"}
+                </Subscribe>
+              )}
+            </div>
+          </Channel>
+          <Hr />
+          <Comments videoID={path} />
+        </Content>
+        <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
+          {recommendedvideos.length && (
+            <p className="text-white mb-[10px]">Recommended Videos</p>
+          )}
+          <div className="flex md:items-center justify-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
+            {randomvideos
+              .filter((element: any) => element?._id !== currentvideo?._id)
+              .map((video, index) => (
+                <Recommended key={index} video={video} />
+              ))}
           </div>
-        </Channel>
-        <Hr />
-        <Comments videoID={path} />
-      </Content>
-      <Recommendation className="flex flex-col items-center mb-[30px] justify-center max-w-[100%] ">
-        {recommendedvideos.length && <p className="text-white mb-[10px]">Recommended Videos</p>}
-        <div className="flex md:items-center justify-center flex-row md:flex-col w-[100%] overflow-x-scroll px-[10px] ">
-          {randomvideos.filter((element:any)=>element?._id !== currentvideo?._id).map((video, index) => (
-            <Recommended key={index} video={video} />
-          ))}
-        </div>
-      </Recommendation>
-    </Container>
-  </>
+        </Recommendation>
+      </Container>
+    </>
   );
 };
 

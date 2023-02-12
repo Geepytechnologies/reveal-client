@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../utils/userSlice";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
@@ -79,6 +79,7 @@ type UserCredential = {
 };
 
 const SignIn = () => {
+  const { currentuser } = useSelector((state: any) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -93,7 +94,7 @@ const SignIn = () => {
         `${domain}/api/auth/signin`,
         { username, password },
         {
-          withCredentials: true,
+          headers: { token: `Bearer ${currentuser.accessToken}` },
         }
       );
       dispatch(loginSuccess(res.data));

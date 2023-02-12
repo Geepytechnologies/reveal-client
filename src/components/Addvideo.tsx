@@ -9,6 +9,7 @@ import {
     getDownloadURL,
   } from "firebase/storage";
 import app from "../firebase"
+import { useSelector } from 'react-redux';
 
 
 /* type Props = {
@@ -85,6 +86,7 @@ const Addvideo = () => {
   const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
+  const {currentuser} = useSelector((state:any)=>state.user)
 
   const navigate = useNavigate();
 
@@ -140,7 +142,7 @@ const Addvideo = () => {
   }, [img]);
   const handleUpload = async (e: { preventDefault: () => void; })=>{
     e.preventDefault();
-    const res = await axios.post(`${domain}/api/videos`, {...inputs, tags}, {withCredentials: true})
+    const res = await axios.post(`${domain}/api/videos`, {...inputs, tags}, { headers: { token: `Bearer ${currentuser.accessToken}` },})
     // setOpen(false)
     res.status === 200 && navigate(`/videos/${res.data._id}`)
   }
